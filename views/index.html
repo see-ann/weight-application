@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    
+    <body>
+        <div style="float:center;">
+            <form action = "http://127.0.0.1:8081/" method = "POST">
+            <table>
+              <tr>
+                <th style="background-color:rgb(17, 104, 133); color:antiquewhite">Name</th>
+              <th style="background-color:rgb(17, 104, 133); color:antiquewhite">Birthday</th>
+              <th style="background-color:rgb(17, 104, 133); color:antiquewhite">Button</th>
+                <th style="background-color:rgb(17, 104, 133); color:antiquewhite">Weight</th>
+                <th style="background-color:rgb(17, 104, 133); color:antiquewhite">Date</th>
+              </tr>
+              <tr>
+                <td>Sean</td>
+              <td>December 23</td>
+              <td><input type="button" id="Sean" value = "Sean" name="Sean" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="sean_weight" name="sean_weight" >
+              </td>
+              <td>
+              <input type="date" id="sean_date" name="sean_date">
+              </td>
+              </tr>
+              <tr>
+                <td>Yoda</td>
+              <td>July 20</td>
+              <td><input type="button" id="Yoda" value = "Yoda" name="Yoda" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="yoda_weight" name="yoda_weight" >
+              </td>
+              <td>
+              <input type="date" id="yoda_date" name="yoda_date">
+              </td>
+              </tr>
+              <tr>
+                <td>Gwen</td>
+              <td>December 23</td>
+              <td><input type="button" id="Gwen" value = "Gwen" name="Gwen" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="gwen_weight" name="gwen_weight" >
+              </td>
+              <td>
+              <input type="date" id="gwen_date" name="gwen_date">
+              </td>
+              </tr>
+              <tr>
+                <td>Anthony</td>
+              <td>October 1</td>
+              <td><input type="button" id="Anthony" value = "Anthony" name="Anthony" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="anthony_weight" name="anthony_weight" >
+              </td>
+              <td>
+              <input type="date" id="anthony_date" name="anthony_date">
+              </td>
+              </tr>
+              <tr>
+                <td>Sharon</td>
+              <td>October 27</td>
+              <td><input type="button" id="Sharon" value = "Sharon" name="Sharon" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="sharon_weight" name="sharon_weight" >
+              </td>
+              <td>
+              <input type="date" id="sharon_date" name="sharon_date">
+              </td>
+              </tr>
+              <tr>
+                <td>Steven</td>
+              <td>September 1</td>
+              <td><input type="button" id="Steven" value = "Steven" name="Steven" onclick="dosomething(this.name)">
+              </td>
+                <td>
+              <input type="text" placeholder = "Enter..." id="steven_weight" name="steven_weight" >
+              </td>
+              <td>
+              <input type="date" id="steven_date" name="steven_date">
+              </td>
+              </tr>
+    
+            <tr>
+              <td><input type="submit" value="Submit"></td>
+            </tr>
+            </table>
+          </form>
+        </div>
+        <br><h style="font-size:17px"><u><b>Search</b></u></h>
+        <form action = "http://127.0.0.1:8081/process_get" method = "GET">
+            Name: <input type = "text" name = "name"> <br>
+            Date: <input type = "date" name = "date"><br>
+            <input type = "submit" value = "Submit">
+         </form>
+            <input type="button" value="Generate Table" onclick="GenerateTable()" />
+            <hr />
+            <div id="dvTable"></div>
+        
+         
+    </body>
+    <script src="./dosomething.js"></script>
+
+
+    <script>
+        function GenerateTable() {
+            dataString = '${allData}';
+            dataArray = dataString.split(",");
+            console.log("Data: "+dataArray[5]);
+            rowLength = dataArray.length/3 + 1;
+            data = new Array(rowLength);
+            // Loop to create 2D array using 1D array 
+            for (var i = 0; i < rowLength; i++) { 
+                  data[i] = new Array(3);
+                }
+            data[0] = ["Name", "Weight", "Date"]; 
+            var h = 0;
+            // Loop to initilize 2D array elements. 
+            for (var i = 1; i < rowLength; i++) { 
+                for (var j = 0; j < 3; j++) {
+                  data[i][j] = dataArray[h++];
+                    }
+                  }
+            console.log("Before: "+data);
+            for (var i = data.length-1 ; i >= 1; i--) { 
+                for (var j = 2; j >=0; j--) {
+                    if (!data[i][j]){
+                      data.splice(i, 1);
+                      break;
+                    }  
+                  }
+                }
+            console.log("After: "+data);
+            //Create a HTML Table element.
+            var table = document.createElement("TABLE");
+            table.border = "1";
+            
+            //Get the count of columns.
+            var columnCount = data[0].length;
+            
+            //Add the header row.
+            var row = table.insertRow(-1);
+            for (var i = 0; i < columnCount; i++) {
+                var headerCell = document.createElement("TH");
+                headerCell.innerHTML = data[0][i];
+                row.appendChild(headerCell);
+            }
+     
+            //Add the data rows.
+            for (var i = 1; i < data.length; i++) {
+                row = table.insertRow(-1);
+                for (var j = 0; j < columnCount; j++) {
+                    var cell = row.insertCell(-1);
+                    cell.innerHTML = data[i][j];
+                }
+            }
+     
+            var dvTable = document.getElementById("dvTable");
+            dvTable.innerHTML = "";
+            dvTable.appendChild(table);
+        }
+    </script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
